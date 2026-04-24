@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404 - Entity Not Found</title>
+    <link rel="stylesheet" href="{{ css_path }}" />
+  </head>
+  <body>
+    <main class="nf-shell">
+      <section class="art-top" aria-hidden="true">
+        <div class="art-frame">
+          <canvas id="adam-dots-canvas"></canvas>
+        </div>
+      </section>
+      <section class="nf-info">
+        <h1>Entity Not Found</h1>
+        <p class="lead">
+          We looked for
+          <code>{{ node_type }}/{{ local_id }}</code>
+          but could not find triples for it in the configured KG.
+        </p>
+        <div class="actions">
+          <a href="{{ id_path }}" class="btn primary">Try Resolver Again</a>
+          <a href="{{ home_path }}" class="btn">Go To Server Home</a>
+        </div>
+      </section>
+    </main>
+    <script src="{{ dots_data_js_path }}"></script>
+    <script>
+      (() => {
+        const canvas = document.getElementById("adam-dots-canvas");
+        if (!canvas || !window.ADAM_DOTS) return;
+
+        const data = window.ADAM_DOTS;
+        const width = Number(data.width) || 900;
+        const height = Number(data.height) || 500;
+        const dots = Array.isArray(data.dots) ? data.dots : [];
+
+        const draw = () => {
+          const ctx = canvas.getContext("2d");
+          if (!ctx) return;
+
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+          const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+          const horizontalMargin = viewportWidth <= 700 ? 12 : 20;
+          const topMargin = viewportWidth <= 700 ? 10 : 16;
+          const bottomReserve = viewportWidth <= 700 ? 170 : 210;
+
+          const maxWidth = Math.max(320, viewportWidth - horizontalMargin * 2);
+          const widthScale = maxWidth / width;
+          const heightScale = Math.max(0.2, (viewportHeight - topMargin - bottomReserve) / height);
+          const safeScale = Math.max(0.16, Math.min(widthScale, heightScale));
+
+          const drawWidth = Math.round(width * safeScale);
+          const drawHeight = Math.round(height * safeScale);
+
+          canvas.width = Math.round(drawWidth * dpr);
+          canvas.height = Math.round(drawHeight * dpr);
+          canvas.style.width = `${drawWidth}px`;
+          canvas.style.height = `${drawHeight}px`;
+
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.clearRect(0, 0, drawWidth, drawHeight);
+
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, drawWidth, drawHeight);
+          ctx.fillStyle = "#2b2b2b";
+
+          for (const dot of dots) {
+            if (!Array.isArray(dot) || dot.length < 3) continue;
+            const x = Number(dot[0]) * safeScale;
+            const y = Number(dot[1]) * safeScale;
+            const radius = Number(dot[2]) * safeScale;
+            if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(radius)) continue;
+            if (radius <= 0) continue;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        };
+
+        draw();
+        window.addEventListener("resize", draw);
+      })();
+    </script>
+  </body>
+</html>
