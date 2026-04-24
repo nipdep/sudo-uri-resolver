@@ -1,0 +1,1 @@
+"""Persistent URI resolver package."""

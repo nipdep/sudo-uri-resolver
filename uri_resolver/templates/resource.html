@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title }} - SUDO KG</title>
+    <link rel="stylesheet" href="{{ css_path }}" />
+  </head>
+  <body>
+    <header class="site-chrome">
+      <div class="chrome-inner">
+        <div class="wordmark-group">
+          <div class="wordmark-symbol" aria-hidden="true"></div>
+          <div class="wordmark-text">
+            <span class="wordmark-title">SUDO KG Resolver</span>
+            <span class="wordmark-subtitle">Scholarly Knowledge Graph Resource Page</span>
+          </div>
+        </div>
+        <nav class="chrome-links" aria-label="Top navigation">
+          <a href="{{ doc_path }}" class="active">Entity</a>
+          <a href="{{ data_path }}">Data</a>
+          <a href="{{ persistent_uri }}">URI</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mw-page">
+      <div class="page-shell">
+        <section class="entity-header">
+          <div class="title-row">
+            <h1>{{ title }}</h1>
+            <span class="entity-id">{{ node_type }}/{{ local_id }}</span>
+          </div>
+          {% if description %}
+          <p class="description">{{ description }}</p>
+          {% endif %}
+        </section>
+
+        <nav class="page-tabs" aria-label="Entity actions">
+          <a href="{{ doc_path }}" class="active">Read</a>
+          <a href="{{ data_path }}">Download RDF</a>
+          <a href="{{ source_url }}">SPARQL Query</a>
+        </nav>
+
+        <div class="layout">
+          <aside class="sidebar">
+            <h2>Entity Information</h2>
+            <dl class="facts">
+              <dt>Persistent URI</dt>
+              <dd><a href="{{ persistent_uri }}">{{ persistent_uri }}</a></dd>
+
+              <dt>Node Type</dt>
+              <dd>{{ node_type }}</dd>
+
+              <dt>Local Identifier</dt>
+              <dd>{{ local_id }}</dd>
+
+              <dt>Total Values</dt>
+              <dd>{{ statement_count }}</dd>
+
+              <dt>Fuseki Response Type</dt>
+              <dd><code>{{ source_content_type }}</code></dd>
+            </dl>
+
+            <h3>Machine-Readable Views</h3>
+            <ul class="format-links">
+              <li><a href="{{ data_path }}">Negotiated RDF</a></li>
+              <li><a href="{{ data_ttl_path }}">Turtle</a></li>
+              <li><a href="{{ data_jsonld_path }}">JSON-LD</a></li>
+              <li><a href="{{ data_rdf_path }}">RDF/XML</a></li>
+            </ul>
+          </aside>
+
+          <section class="content">
+            <div class="content-header">
+              <h2>Statements</h2>
+              <span class="count-pill">{{ statement_count }} values</span>
+            </div>
+
+            {% if statements %}
+            <table class="statement-table">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for statement in statements %}
+                <tr>
+                  <td class="property-col">
+                    <a href="{{ statement['predicate_uri'] }}">{{ statement['predicate_label'] }}</a>
+                  </td>
+                  <td>
+                    <ul class="value-list">
+                      {% for value in statement['values'] %}
+                      <li class="value-item">
+                        {% if value['is_uri'] %}
+                        <a href="{{ value['uri'] }}">{{ value['display'] }}</a>
+                        {% else %}
+                        <span>{{ value['display'] }}</span>
+                        {% endif %}
+                        {% if value['meta'] %}
+                        <span class="meta-tag">{{ value['meta'] }}</span>
+                        {% endif %}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <p class="empty-state">No statements were returned from Fuseki for this URI.</p>
+            {% endif %}
+          </section>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

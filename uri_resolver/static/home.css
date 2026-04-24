@@ -1,0 +1,168 @@
+:root {
+  --wiki-bg: #eaecf0;
+  --wiki-page: #ffffff;
+  --wiki-border: #a2a9b1;
+  --wiki-soft-border: #c8ccd1;
+  --wiki-text: #202122;
+  --wiki-muted: #54595d;
+  --wiki-link: #3366cc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body.home-body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: var(--wiki-bg);
+  color: var(--wiki-text);
+}
+
+a {
+  color: var(--wiki-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  font-family: Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.84rem;
+  background: #f1f3f5;
+  border: 1px solid #d8dde3;
+  border-radius: 3px;
+  padding: 0.08rem 0.3rem;
+}
+
+.home-main {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 1.9rem 1rem 2rem;
+}
+
+.home-hero {
+  text-align: center;
+}
+
+.home-logo {
+  width: 112px;
+  height: 112px;
+  margin: 0 auto;
+  border: 1px solid var(--wiki-border);
+  border-radius: 10px;
+  background: #f8f9fa;
+  color: #72777d;
+  font-size: 4rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  font-family: "Linux Libertine", Georgia, "Times New Roman", serif;
+}
+
+.home-hero h1 {
+  margin: 0.95rem 0 0;
+  font-size: 2.65rem;
+  font-weight: 600;
+  font-family: "Linux Libertine", Georgia, "Times New Roman", serif;
+  color: #2c3e57;
+}
+
+.home-hero p {
+  margin: 0.35rem 0 0;
+  color: var(--wiki-muted);
+  font-size: 1rem;
+}
+
+.home-search {
+  margin: 2.6rem auto 0;
+  width: min(1240px, 100%);
+}
+
+.home-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 210px 140px;
+  gap: 0.65rem;
+}
+
+.home-search-input,
+.home-search-select,
+.home-search-button {
+  height: 3rem;
+  border: 1px solid var(--wiki-border);
+  border-radius: 4px;
+  font-size: 1.03rem;
+}
+
+.home-search-input,
+.home-search-select {
+  background: var(--wiki-page);
+  color: var(--wiki-text);
+  padding: 0 0.8rem;
+}
+
+.home-search-input::placeholder {
+  color: #8b8f98;
+}
+
+.home-search-input:focus,
+.home-search-select:focus {
+  outline: 2px solid rgba(51, 102, 204, 0.2);
+  border-color: #6b8fda;
+}
+
+.home-search-button {
+  background: #3366cc;
+  color: #ffffff;
+  border-color: #2f5fbe;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.home-search-button:hover {
+  filter: brightness(1.04);
+}
+
+.home-search-note {
+  margin: 0.55rem 0 0;
+  color: var(--wiki-muted);
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+@media (max-width: 980px) {
+  .home-main {
+    padding-top: 1.45rem;
+  }
+
+  .home-search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .home-search-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-main {
+    padding: 1rem 0.55rem 1.2rem;
+  }
+
+  .home-logo {
+    width: 88px;
+    height: 88px;
+    font-size: 3rem;
+  }
+
+  .home-hero h1 {
+    font-size: 2.1rem;
+  }
+}

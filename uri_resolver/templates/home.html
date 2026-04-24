@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SUDO-KG Resolver</title>
+    <link rel="stylesheet" href="{{ css_path }}" />
+  </head>
+  <body class="home-body">
+    <main class="home-main">
+      <section class="home-hero">
+        <div class="home-logo" aria-hidden="true">S</div>
+        <h1>SUDO-KG</h1>
+        <p>Scholarly Knowledge Graph URI Resolver</p>
+      </section>
+
+      <form
+        id="resolver-search-form"
+        class="home-search"
+        action="{{ resolve_path }}"
+        method="get"
+      >
+        <div class="home-search-row">
+          <input
+            id="local-id-input"
+            name="local_id"
+            type="text"
+            class="home-search-input"
+            placeholder="Type an entity ID..."
+            required
+          />
+
+          <select id="node-type-select" name="node_type" class="home-search-select">
+            {% for option in node_type_options %}
+            <option
+              value="{{ option['value'] }}"
+              {% if option['value'] == default_node_type %}selected{% endif %}
+            >
+              {{ option['label'] }}
+            </option>
+            {% endfor %}
+          </select>
+
+          <button type="submit" class="home-search-button" aria-label="Find entity">Find</button>
+        </div>
+        <p class="home-search-note">
+          IDs are normalized to lowercase and kebab-case (spaces become
+          <code>-</code>).
+        </p>
+      </form>
+    </main>
+
+    <script>
+      (() => {
+        const form = document.getElementById("resolver-search-form");
+        const input = document.getElementById("local-id-input");
+        if (!form || !input) return;
+
+        const normalize = (value) =>
+          value
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+
+        form.addEventListener("submit", () => {
+          input.value = normalize(input.value);
+        });
+      })();
+    </script>
+  </body>
+</html>
