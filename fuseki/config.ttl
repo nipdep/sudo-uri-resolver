@@ -1,0 +1,140 @@
+PREFIX :       <#>
+PREFIX fuseki: <http://jena.apache.org/fuseki#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX tdb2:   <http://jena.apache.org/2016/tdb#>
+PREFIX text:   <http://jena.apache.org/text#>
+
+[] a fuseki:Server ;
+   fuseki:services (
+       :service_gold_standard_kg
+       :service_qasper_kg
+       :service_sciqa_kg
+       :service_iswc_kg
+       :service_cskg_kg
+   ) .
+
+:service_gold_standard_kg a fuseki:Service ;
+    rdfs:label "gold_standard_kg dataset with Lucene full-text search" ;
+    fuseki:name "gold_standard_kg" ;
+    fuseki:serviceQuery "query" , "sparql" ;
+    fuseki:serviceUpdate "update" ;
+    fuseki:serviceReadGraphStore "get" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:dataset :text_dataset_gold_standard_kg .
+
+:text_dataset_gold_standard_kg a text:TextDataset ;
+    text:dataset :dataset_gold_standard_kg ;
+    text:index :index_gold_standard_kg .
+
+:dataset_gold_standard_kg a tdb2:DatasetTDB2 ;
+    tdb2:location "/gold_standard_kg/tdb2" .
+
+:index_gold_standard_kg a text:TextIndexLucene ;
+    text:directory <file:/gold_standard_kg/lucene> ;
+    text:entityMap :entity_map ;
+    text:storeValues true ;
+    text:analyzer [ a text:StandardAnalyzer ] ;
+    text:queryParser text:AnalyzingQueryParser .
+
+:service_qasper_kg a fuseki:Service ;
+    rdfs:label "qasper_kg dataset with Lucene full-text search" ;
+    fuseki:name "qasper_kg" ;
+    fuseki:serviceQuery "query" , "sparql" ;
+    fuseki:serviceUpdate "update" ;
+    fuseki:serviceReadGraphStore "get" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:dataset :text_dataset_qasper_kg .
+
+:text_dataset_qasper_kg a text:TextDataset ;
+    text:dataset :dataset_qasper_kg ;
+    text:index :index_qasper_kg .
+
+:dataset_qasper_kg a tdb2:DatasetTDB2 ;
+    tdb2:location "/qasper_kg/tdb2" .
+
+:index_qasper_kg a text:TextIndexLucene ;
+    text:directory <file:/qasper_kg/lucene> ;
+    text:entityMap :entity_map ;
+    text:storeValues true ;
+    text:analyzer [ a text:StandardAnalyzer ] ;
+    text:queryParser text:AnalyzingQueryParser .
+
+:service_sciqa_kg a fuseki:Service ;
+    rdfs:label "sciqa_kg dataset with Lucene full-text search" ;
+    fuseki:name "sciqa_kg" ;
+    fuseki:serviceQuery "query" , "sparql" ;
+    fuseki:serviceUpdate "update" ;
+    fuseki:serviceReadGraphStore "get" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:dataset :text_dataset_sciqa_kg .
+
+:text_dataset_sciqa_kg a text:TextDataset ;
+    text:dataset :dataset_sciqa_kg ;
+    text:index :index_sciqa_kg .
+
+:dataset_sciqa_kg a tdb2:DatasetTDB2 ;
+    tdb2:location "/sciqa_kg/tdb2" .
+
+:index_sciqa_kg a text:TextIndexLucene ;
+    text:directory <file:/sciqa_kg/lucene> ;
+    text:entityMap :entity_map ;
+    text:storeValues true ;
+    text:analyzer [ a text:StandardAnalyzer ] ;
+    text:queryParser text:AnalyzingQueryParser .
+
+:service_iswc_kg a fuseki:Service ;
+    rdfs:label "iswc_kg dataset with Lucene full-text search" ;
+    fuseki:name "iswc_kg" ;
+    fuseki:serviceQuery "query" , "sparql" ;
+    fuseki:serviceUpdate "update" ;
+    fuseki:serviceReadGraphStore "get" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:dataset :text_dataset_iswc_kg .
+
+:text_dataset_iswc_kg a text:TextDataset ;
+    text:dataset :dataset_iswc_kg ;
+    text:index :index_iswc_kg .
+
+:dataset_iswc_kg a tdb2:DatasetTDB2 ;
+    tdb2:location "/iswc_kg/tdb2" .
+
+:index_iswc_kg a text:TextIndexLucene ;
+    text:directory <file:/iswc_kg/lucene> ;
+    text:entityMap :entity_map ;
+    text:storeValues true ;
+    text:analyzer [ a text:StandardAnalyzer ] ;
+    text:queryParser text:AnalyzingQueryParser .
+
+:service_cskg_kg a fuseki:Service ;
+    rdfs:label "cskg_kg dataset with Lucene full-text search" ;
+    fuseki:name "cskg_kg" ;
+    fuseki:serviceQuery "query" , "sparql" ;
+    fuseki:serviceUpdate "update" ;
+    fuseki:serviceReadGraphStore "get" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:dataset :text_dataset_cskg_kg .
+
+:text_dataset_cskg_kg a text:TextDataset ;
+    text:dataset :dataset_cskg_kg ;
+    text:index :index_cskg_kg .
+
+:dataset_cskg_kg a tdb2:DatasetTDB2 ;
+    tdb2:location "/cskg_kg/tdb2" .
+
+:index_cskg_kg a text:TextIndexLucene ;
+    text:directory <file:/cskg_kg/lucene> ;
+    text:entityMap :entity_map ;
+    text:storeValues true ;
+    text:analyzer [ a text:StandardAnalyzer ] ;
+    text:queryParser text:AnalyzingQueryParser .
+
+:entity_map a text:EntityMap ;
+    text:entityField "uri" ;
+    text:defaultField "label" ;
+    text:uidField "uid" ;
+    text:langField "lang" ;
+    text:graphField "graph" ;
+    text:map (
+        [ text:field "label" ; text:predicate rdfs:label ]
+    ) .
