@@ -1,25 +1,23 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ title }} - SUDO KG</title>
-    <link rel="stylesheet" href="{{ css_path }}" />
+{% include "_head.html" %}
   </head>
   <body>
     <header class="site-chrome">
       <div class="chrome-inner">
         <div class="wordmark-group">
-          <div class="wordmark-symbol" aria-hidden="true"></div>
+          <img class="wordmark-symbol" src="{{ apple_touch_icon_path }}" alt="" aria-hidden="true" />
           <div class="wordmark-text">
-            <span class="wordmark-title">SUDO KG Resolver</span>
-            <span class="wordmark-subtitle">Scholarly Knowledge Graph Resource Page</span>
+            <a class="wordmark-title" href="{{ home_path }}">SUDO KG</a>
+            <span class="wordmark-subtitle">Discourse Aware Scholarly Knowledge Graph</span>
           </div>
         </div>
         <nav class="chrome-links" aria-label="Top navigation">
-          <a href="{{ doc_path }}" class="active">Entity</a>
-          <a href="{{ data_path }}">Data</a>
-          <a href="{{ persistent_uri }}">URI</a>
+          <a href="{{ doc_path }}" class="active">Web</a>
+          <a href="{{ rdf_path }}">Machine readable View</a>
+          <a href="{{ sparql_path }}">SPARQL</a>
         </nav>
       </div>
     </header>
@@ -29,7 +27,7 @@
         <section class="entity-header">
           <div class="title-row">
             <h1>{{ title }}</h1>
-            <span class="entity-id">{{ node_type }}/{{ local_id }}</span>
+            <span class="entity-id">{{ node_type }}</span>
           </div>
           {% if description %}
           <p class="description">{{ description }}</p>
@@ -37,9 +35,9 @@
         </section>
 
         <nav class="page-tabs" aria-label="Entity actions">
-          <a href="{{ doc_path }}" class="active">Read</a>
-          <a href="{{ data_path }}">Download RDF</a>
-          <a href="{{ source_url }}">SPARQL Query</a>
+          <a href="{{ doc_path }}" class="active">Preview</a>
+          <a href="{{ describe_path }}">Describe</a>
+          <a href="{{ graph_path }}">Graph View</a>
         </nav>
 
         <div class="layout">
@@ -47,7 +45,7 @@
             <h2>Entity Information</h2>
             <dl class="facts">
               <dt>Persistent URI</dt>
-              <dd><a href="{{ persistent_uri }}">{{ persistent_uri }}</a></dd>
+              <dd><a href="{{ persistent_uri_path }}">{{ persistent_uri }}</a></dd>
 
               <dt>Node Type</dt>
               <dd>{{ node_type }}</dd>
@@ -61,14 +59,6 @@
               <dt>Fuseki Response Type</dt>
               <dd><code>{{ source_content_type }}</code></dd>
             </dl>
-
-            <h3>Machine-Readable Views</h3>
-            <ul class="format-links">
-              <li><a href="{{ data_path }}">Negotiated RDF</a></li>
-              <li><a href="{{ data_ttl_path }}">Turtle</a></li>
-              <li><a href="{{ data_jsonld_path }}">JSON-LD</a></li>
-              <li><a href="{{ data_rdf_path }}">RDF/XML</a></li>
-            </ul>
           </aside>
 
           <section class="content">
@@ -118,5 +108,6 @@
         </div>
       </div>
     </main>
+{% include "_footer.html" %}
   </body>
 </html>

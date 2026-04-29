@@ -11,7 +11,6 @@ class NodeType(StrEnum):
     author = "author"
     paper = "paper"
     concept = "concept"
-    artifact = "artifact"
     proposition = "proposition"
 
 
