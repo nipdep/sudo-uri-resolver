@@ -3,9 +3,13 @@
   --wiki-page: #ffffff;
   --wiki-border: #a2a9b1;
   --wiki-soft-border: #c8ccd1;
+  --wiki-soft-bg: #f8f9fa;
+  --wiki-head-bg: #fdfdfd;
   --wiki-text: #202122;
   --wiki-muted: #54595d;
   --wiki-link: #3366cc;
+  --wiki-link-hover: #447ff5;
+  --wiki-tab-bg: #f6f8fc;
 }
 
 * {
@@ -20,8 +24,11 @@ body {
 
 body.home-body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background: var(--wiki-bg);
   color: var(--wiki-text);
+  background: linear-gradient(180deg, #f6f8fc 0, var(--wiki-bg) 280px);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 a {
@@ -30,66 +37,73 @@ a {
 }
 
 a:hover {
+  color: var(--wiki-link-hover);
   text-decoration: underline;
 }
 
 code {
   font-family: Menlo, Consolas, "Liberation Mono", monospace;
-  font-size: 0.84rem;
   background: #f1f3f5;
   border: 1px solid #d8dde3;
-  border-radius: 3px;
-  padding: 0.08rem 0.3rem;
+  border-radius: 2px;
+  padding: 0.09rem 0.3rem;
+  font-size: 0.84rem;
 }
 
 .home-main {
   max-width: 1320px;
   margin: 0 auto;
-  padding: 1.9rem 1rem 2rem;
+  padding: 2rem 1rem 2.3rem;
+  flex: 1;
 }
 
 .home-hero {
+  margin: 2.4rem auto 0;
   text-align: center;
 }
 
 .home-logo {
-  width: 112px;
-  height: 112px;
+  width: 120px;
+  height: 120px;
   margin: 0 auto;
-  border: 1px solid var(--wiki-border);
-  border-radius: 10px;
-  background: #f8f9fa;
-  color: #72777d;
-  font-size: 4rem;
-  font-weight: 700;
-  display: grid;
-  place-items: center;
-  font-family: "Linux Libertine", Georgia, "Times New Roman", serif;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  border: 0;
+  background: transparent;
 }
 
 .home-hero h1 {
-  margin: 0.95rem 0 0;
-  font-size: 2.65rem;
-  font-weight: 600;
+  margin: 0.9rem 0 0;
   font-family: "Linux Libertine", Georgia, "Times New Roman", serif;
-  color: #2c3e57;
+  font-size: 2.55rem;
+  font-weight: 400;
+  color: #000000;
 }
 
 .home-hero p {
   margin: 0.35rem 0 0;
   color: var(--wiki-muted);
-  font-size: 1rem;
+  font-size: 0.98rem;
 }
 
 .home-search {
-  margin: 2.6rem auto 0;
-  width: min(1240px, 100%);
+  margin: 8.4rem auto 0;
+  display: block;
+  width: calc(100vw - 2rem);
+  max-width: 1320px;
 }
 
 .home-search-row {
+  width: min(1240px, 90%);
+  margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 210px 140px;
   gap: 0.65rem;
+  padding: 1rem;
+  background: var(--wiki-head-bg);
+  border: 1px solid var(--wiki-border);
+  border-radius: 4px;
 }
 
 .home-search-input,
@@ -119,7 +133,7 @@ code {
 }
 
 .home-search-button {
-  background: #3366cc;
+  background: #045df6;
   color: #ffffff;
   border-color: #2f5fbe;
   font-weight: 600;
@@ -131,9 +145,13 @@ code {
 }
 
 .home-search-note {
-  margin: 0.55rem 0 0;
+  margin: 0;
+  width: min(1240px, 90%);
+  margin: 0 auto;
+  padding: 0.7rem 0 0;
   color: var(--wiki-muted);
   font-size: 0.9rem;
+  font-style: italic;
   text-align: left;
 }
 
@@ -159,10 +177,22 @@ code {
   .home-logo {
     width: 88px;
     height: 88px;
-    font-size: 3rem;
   }
 
   .home-hero h1 {
-    font-size: 2.1rem;
+    font-size: 2rem;
   }
+}
+
+.site-footer {
+  background: transparent;
+}
+
+.footer-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0.85rem 1rem 1.1rem;
+  color: var(--wiki-muted);
+  font-size: 0.85rem;
+  text-align: center;
 }

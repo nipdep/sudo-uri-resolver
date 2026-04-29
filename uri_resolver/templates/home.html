@@ -1,17 +1,15 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+{% include "_head.html" %}
     <title>SUDO-KG Resolver</title>
-    <link rel="stylesheet" href="{{ css_path }}" />
   </head>
   <body class="home-body">
     <main class="home-main">
       <section class="home-hero">
-        <div class="home-logo" aria-hidden="true">S</div>
-        <h1>SUDO-KG</h1>
-        <p>Scholarly Knowledge Graph URI Resolver</p>
+        <img class="home-logo" src="{{ apple_touch_icon_path }}" alt="" aria-hidden="true" />
+        <h1>SUDO KG</h1>
+        <p>Discourse Aware Scholarly Knowledge Graph</p>
       </section>
 
       <form
@@ -44,8 +42,8 @@
           <button type="submit" class="home-search-button" aria-label="Find entity">Find</button>
         </div>
         <p class="home-search-note">
-          IDs are normalized to lowercase and kebab-case (spaces become
-          <code>-</code>).
+          IDs are normalized to lowercase and underscore_case (spaces become
+          <code>_</code>).
         </p>
       </form>
     </main>
@@ -60,13 +58,15 @@
           value
             .trim()
             .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-+|-+$/g, "");
+            .replace(/[^a-z0-9]+/g, "_")
+            .replace(/_+/g, "_")
+            .replace(/^_+|_+$/g, "");
 
         form.addEventListener("submit", () => {
           input.value = normalize(input.value);
         });
       })();
     </script>
+{% include "_footer.html" %}
   </body>
 </html>
