@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>{{ title }} - RDF - SUDO KG</title>
+{% include "_head.html" %}
+  </head>
+  <body>
+    <header class="site-chrome">
+      <div class="chrome-inner">
+        <div class="wordmark-group">
+          <img class="wordmark-symbol" src="{{ apple_touch_icon_path }}" alt="" aria-hidden="true" />
+          <div class="wordmark-text">
+            <a class="wordmark-title" href="{{ home_path }}">SUDO KG</a>
+            <span class="wordmark-subtitle">Discourse Aware Scholarly Knowledge Graph</span>
+          </div>
+        </div>
+        <nav class="chrome-links" aria-label="Top navigation">
+          {% if view_mode == "describe" %}
+          <a href="{{ describe_path }}">Web</a>
+          {% else %}
+          <a href="{{ doc_path }}">Web</a>
+          {% endif %}
+          <a href="{{ rdf_path }}" class="active">Machine readable View</a>
+          <a href="{{ sparql_path }}">SPARQL</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mw-page">
+      <div class="page-shell">
+        <section class="entity-header">
+          <div class="title-row">
+            <h1>{{ title }}</h1>
+            <span class="entity-id">{{ node_type }}</span>
+          </div>
+          {% if description %}
+          <p class="description">{{ description }}</p>
+          {% endif %}
+        </section>
+
+        <nav class="page-tabs" aria-label="Entity actions">
+          <a href="{{ doc_path }}">Preview</a>
+          <a href="{{ describe_path }}">Describe</a>
+          <a href="{{ graph_path }}">Graph View</a>
+        </nav>
+
+        <section class="content rdf-content rdf-content-full">
+          <div class="content-header">
+            <h2>RDF Serialization</h2>
+            <span class="count-pill">{{ rdf_line_count }} lines</span>
+          </div>
+          <p class="rdf-description">This view shows the exact Turtle serialization for the current {{ view_mode }} page context.</p>
+          <div class="rdf-meta-bar">
+            <span class="meta-tag">{{ node_type }}</span>
+            <span class="meta-tag">{{ view_mode|title }}</span>
+            <span class="meta-tag">{{ source_content_type }}</span>
+          </div>
+          <pre class="rdf-code"><code>{{ rdf_text }}</code></pre>
+        </section>
+      </div>
+    </main>
+{% include "_footer.html" %}
+  </body>
+</html>

@@ -19,12 +19,16 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: #ffffff;
   color: var(--text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .nf-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .art-top {
@@ -130,4 +134,17 @@ code {
     width: 100%;
     max-width: 280px;
   }
+}
+
+.site-footer {
+  background: transparent;
+}
+
+.footer-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0.85rem 1rem 1.1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
 }

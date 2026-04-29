@@ -136,17 +136,29 @@ class ResolverService:
         encoded_local_id = quote(identifier.local_id, safe="")
         return f"{self.persistent_uri_base}{identifier.node_type.value}/{encoded_local_id}"
 
-    def doc_redirect_target(self, identifier: ResourceIdentifier, persistent_uri: str) -> str:
-        return self.backend.get_doc_target(identifier, persistent_uri)
+    def doc_redirect_target(
+        self,
+        resource_label: str,
+        persistent_uri: str,
+        dataset: str | None = None,
+    ) -> str:
+        return self.backend.get_doc_target(resource_label, persistent_uri, dataset=dataset)
 
     def data_redirect_target(
         self,
-        identifier: ResourceIdentifier,
+        resource_label: str,
         persistent_uri: str,
         media_type: str,
         fmt: str | None = None,
+        dataset: str | None = None,
     ) -> str:
-        return self.backend.get_data_target(identifier, persistent_uri, media_type, fmt=fmt)
+        return self.backend.get_data_target(
+            resource_label,
+            persistent_uri,
+            media_type,
+            fmt=fmt,
+            dataset=dataset,
+        )
 
     def choose_id_representation(self, accept_header: str | None) -> RepresentationChoice:
         supported = [HTML, JSONLD, TURTLE, RDFXML]

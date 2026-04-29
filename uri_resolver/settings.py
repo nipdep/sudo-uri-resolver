@@ -15,8 +15,8 @@ class AppSettings(BaseSettings):
     )
 
     fuseki_server_url: str
-    fuseki_dataset: str = "idea_kg"
-    persistent_uri_base: str = "https://purl.org/twc/sudo/kg/"
+    fuseki_dataset: str = "gold_standard_kg"
+    persistent_uri_base: str = "https://w3id.org/twc/sudo/kg"
     public_base_path: str = Field(
         default="",
         validation_alias=AliasChoices("PUBLIC_BASE_PATH", "RESOLVER_ROOT_PATH", "ROOT_PATH"),
