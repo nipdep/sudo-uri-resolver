@@ -1,327 +1,330 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>{{ title }} - Describe - SUDO KG</title>
-{% include "_head.html" %}
-  </head>
-  <body>
-    <header class="site-chrome">
-      <div class="chrome-inner">
-        <div class="wordmark-group">
-          <img class="wordmark-symbol" src="{{ apple_touch_icon_path }}" alt="" aria-hidden="true" />
-          <div class="wordmark-text">
-            <a class="wordmark-title" href="{{ home_path }}">SUDO KG</a>
-            <span class="wordmark-subtitle">Discourse Aware Scholarly Knowledge Graph</span>
-          </div>
+
+<head>
+  <title>{{ title }} - Describe - SUDO KG</title>
+  {% include "_head.html" %}
+</head>
+
+<body>
+  <header class="site-chrome">
+    <div class="chrome-inner">
+      <div class="wordmark-group">
+        <img class="wordmark-symbol" src="{{ apple_touch_icon_path }}" alt="" aria-hidden="true" />
+        <div class="wordmark-text">
+          <a class="wordmark-title" href="{{ home_path }}">SUDO KG</a>
+          <span class="wordmark-subtitle">Discourse Aware Scholarly Knowledge Graph</span>
         </div>
-        <nav class="chrome-links" aria-label="Top navigation">
-          <a href="{{ describe_path }}" class="active">Web</a>
-          <a href="{{ rdf_path }}">Machine readable View</a>
-          <a href="{{ sparql_path }}">SPARQL</a>
-        </nav>
       </div>
-    </header>
+      <nav class="chrome-links" aria-label="Top navigation">
+        <a href="{{ describe_path }}" class="active">Web</a>
+        <a href="{{ rdf_path }}">RDF</a>
+        <a href="{{ sparql_path }}">SPARQL</a>
+      </nav>
+    </div>
+  </header>
 
-    <main class="mw-page">
-      <div class="page-shell">
-        <section class="entity-header">
-          <div class="title-row">
-            <h1>{{ title }}</h1>
-            <span class="entity-id">{{ node_type }}</span>
-          </div>
-          {% if description %}
-          <p class="description">{{ description }}</p>
+  <main class="mw-page">
+    <div class="page-shell">
+      <section class="entity-header">
+        <div class="title-row">
+          <h1>{{ title }}</h1>
+          <span class="entity-id">{{ node_type }}</span>
+        </div>
+        {% if description %}
+        <p class="description">{{ description }}</p>
+        {% endif %}
+      </section>
+
+      <nav class="page-tabs" aria-label="Entity actions">
+        <a href="{{ doc_path }}">Preview</a>
+        <a href="{{ describe_path }}" class="active">Describe</a>
+        <a href="{{ graph_path }}">Graph View</a>
+      </nav>
+
+      <div class="layout">
+        <aside class="sidebar">
+          <h2>Describe Overview</h2>
+          <dl class="facts">
+            <dt>Persistent URI</dt>
+            <dd><a href="{{ persistent_uri_path }}">{{ persistent_uri }}</a></dd>
+
+            <dt>Node Type</dt>
+            <dd>{{ node_type }}</dd>
+
+            <dt>Connected Nodes Expanded</dt>
+            <dd>{{ connected_node_count }}</dd>
+
+            <dt>Visible Value Count</dt>
+            <dd>{{ statement_count }}</dd>
+
+            <dt>Fuseki Response Type</dt>
+            <dd><code>{{ source_content_type }}</code></dd>
+          </dl>
+
+          {% if type_labels %}
+          <h3>Semantic Types</h3>
+          <ul class="format-links">
+            {% for type_label in type_labels %}
+            <li>{{ type_label }}</li>
+            {% endfor %}
+          </ul>
           {% endif %}
-        </section>
+          <dl class="facts">
+            <dt>SPARQL Query Count</dt>
+            <dd>{{ sparql_query_count }}</dd>
+          </dl>
+        </aside>
 
-        <nav class="page-tabs" aria-label="Entity actions">
-          <a href="{{ doc_path }}">Preview</a>
-          <a href="{{ describe_path }}" class="active">Describe</a>
-          <a href="{{ graph_path }}">Graph View</a>
-        </nav>
+        <section class="content describe-content">
+          <div class="content-header">
+            <h2>Describe View</h2>
+            <span class="count-pill">{{ connected_node_count }} related nodes expanded</span>
+          </div>
 
-        <div class="layout">
-          <aside class="sidebar">
-            <h2>Describe Overview</h2>
-            <dl class="facts">
-              <dt>Persistent URI</dt>
-              <dd><a href="{{ persistent_uri_path }}">{{ persistent_uri }}</a></dd>
-
-              <dt>Node Type</dt>
-              <dd>{{ node_type }}</dd>
-
-              <dt>Connected Nodes Expanded</dt>
-              <dd>{{ connected_node_count }}</dd>
-
-              <dt>Visible Value Count</dt>
-              <dd>{{ statement_count }}</dd>
-
-              <dt>Fuseki Response Type</dt>
-              <dd><code>{{ source_content_type }}</code></dd>
-            </dl>
-
-            {% if type_labels %}
-            <h3>Semantic Types</h3>
-            <ul class="format-links">
-              {% for type_label in type_labels %}
-              <li>{{ type_label }}</li>
+          {% if metadata_rows or description_groups %}
+          <section class="describe-block">
+            <h3>Description</h3>
+            {% if metadata_rows %}
+            <dl class="describe-metadata">
+              {% for row in metadata_rows %}
+              <dt>{{ row["label"] }}</dt>
+              <dd>
+                <ul class="describe-inline-list">
+                  {% for value in row["values"] %}
+                  <li>
+                    {% if value["uri"] %}
+                    <a href="{{ value['uri'] }}">{{ value["label"] }}</a>
+                    {% else %}
+                    <span>{{ value["label"] }}</span>
+                    {% endif %}
+                    {% if value["meta"] %}
+                    <span class="meta-tag">{{ value["meta"] }}</span>
+                    {% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </dd>
               {% endfor %}
-            </ul>
-            {% endif %}
-            <dl class="facts">
-              <dt>SPARQL Query Count</dt>
-              <dd>{{ sparql_query_count }}</dd>
             </dl>
-          </aside>
+            {% endif %}
 
-          <section class="content describe-content">
-            <div class="content-header">
-              <h2>Describe View</h2>
-              <span class="count-pill">{{ connected_node_count }} related nodes expanded</span>
+            {% if description_groups %}
+            <div class="relation-groups {% if metadata_rows %}description-groups{% endif %}">
+              {% for group in description_groups %}
+              <div class="relation-group">
+                <h4>{{ group["label"] }}</h4>
+                <ul class="value-list">
+                  {% for item in group["items"] %}
+                  <li class="value-item">
+                    {% if item["uri"] %}
+                    <a href="{{ item['uri'] }}">{{ item["label"] }}</a>
+                    {% else %}
+                    <span>{{ item["label"] }}</span>
+                    {% endif %}
+                    {% if item["meta"] %}
+                    <span class="meta-tag">{{ item["meta"] }}</span>
+                    {% endif %}
+                    {% if item["source"] %}
+                    <span class="meta-tag">{{ item["source"] }}</span>
+                    {% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endfor %}
             </div>
-
-            {% if metadata_rows or description_groups %}
-            <section class="describe-block">
-              <h3>Description</h3>
-              {% if metadata_rows %}
-              <dl class="describe-metadata">
-                {% for row in metadata_rows %}
-                <dt>{{ row["label"] }}</dt>
-                <dd>
-                  <ul class="describe-inline-list">
-                    {% for value in row["values"] %}
-                    <li>
-                      {% if value["uri"] %}
-                      <a href="{{ value['uri'] }}">{{ value["label"] }}</a>
-                      {% else %}
-                      <span>{{ value["label"] }}</span>
-                      {% endif %}
-                      {% if value["meta"] %}
-                      <span class="meta-tag">{{ value["meta"] }}</span>
-                      {% endif %}
-                    </li>
-                    {% endfor %}
-                  </ul>
-                </dd>
-                {% endfor %}
-              </dl>
-              {% endif %}
-
-              {% if description_groups %}
-              <div class="relation-groups {% if metadata_rows %}description-groups{% endif %}">
-                {% for group in description_groups %}
-                <div class="relation-group">
-                  <h4>{{ group["label"] }}</h4>
-                  <ul class="value-list">
-                    {% for item in group["items"] %}
-                    <li class="value-item">
-                      {% if item["uri"] %}
-                      <a href="{{ item['uri'] }}">{{ item["label"] }}</a>
-                      {% else %}
-                      <span>{{ item["label"] }}</span>
-                      {% endif %}
-                      {% if item["meta"] %}
-                      <span class="meta-tag">{{ item["meta"] }}</span>
-                      {% endif %}
-                      {% if item["source"] %}
-                      <span class="meta-tag">{{ item["source"] }}</span>
-                      {% endif %}
-                    </li>
-                    {% endfor %}
-                  </ul>
-                </div>
-                {% endfor %}
-              </div>
-              {% endif %}
-            </section>
-            {% endif %}
-
-            {% if artifact_references %}
-            <section class="describe-block">
-              <div class="describe-section-heading">
-                <h3>Paper References</h3>
-                <span class="count-pill">{{ artifact_references|length }} papers</span>
-              </div>
-              <div class="artifact-reference-papers">
-                {% for paper in artifact_references %}
-                <article class="artifact-paper-card">
-                  <h4>
-                    {% if paper["paper_uri"] %}
-                    <a href="{{ paper['paper_uri'] }}">{{ paper["paper_label"] }}</a>
-                    {% else %}
-                    {{ paper["paper_label"] }}
-                    {% endif %}
-                  </h4>
-                  <div class="artifact-section-list">
-                    {% for section in paper["sections"] %}
-                    <details class="artifact-section-card" {% if loop.first %}open{% endif %}>
-                      <summary>
-                        <span>{{ section["title"] }}</span>
-                        <span class="meta-tag">{{ section["kind"] }}</span>
-                      </summary>
-                      <div class="artifact-reference-list">
-                        {% for item in section["items"] %}
-                        <article class="artifact-reference-item">
-                          <div class="artifact-reference-meta">
-                            {% for relation_label in item["relation_labels"] %}
-                            <span class="meta-tag">{{ relation_label }}</span>
-                            {% endfor %}
-                            {% if is_topic_node and item["artifact_label"] %}
-                            <span class="meta-tag">{{ item["artifact_label"] }}</span>
-                            {% endif %}
-                            {% if item["kind"] %}
-                            <span class="meta-tag">{{ item["kind"] }}</span>
-                            {% endif %}
-                            {% if item["sentence_position"] %}
-                            <span class="meta-tag">Sentence {{ item["sentence_position"] }}</span>
-                            {% endif %}
-                          </div>
-                          <p class="artifact-reference-snippet">
-                            {% for fragment in item["fragments"] %}
-                              {% if fragment["match"] %}
-                              <mark class="artifact-hit">{{ fragment["text"] }}</mark>
-                              {% else %}
-                              {{ fragment["text"] }}
-                              {% endif %}
-                            {% endfor %}
-                          </p>
-                          <p class="artifact-reference-source">
-                            <a href="{{ item['node_uri'] }}">{{ item["node_label"] }}</a>
-                          </p>
-                        </article>
-                        {% endfor %}
-                      </div>
-                    </details>
-                    {% endfor %}
-                  </div>
-                </article>
-                {% endfor %}
-              </div>
-            </section>
-            {% endif %}
-
-            {% if describe_kind in ["artifact", "argument", "descriptor"] or is_topic_node %}
-            <section class="describe-block">
-              <h3>Connected Resource</h3>
-              {% if relation_groups %}
-              <div class="relation-groups">
-                {% for group in relation_groups %}
-                <div class="relation-group">
-                  <h4>{{ group["label"] }}</h4>
-                  <ul class="value-list">
-                    {% for item in group["items"] %}
-                    <li class="value-item">
-                      <a href="{{ item['uri'] }}">{{ item["label"] }}</a>
-                      {% if item["meta"] %}
-                      <span class="meta-tag">{{ item["meta"] }}</span>
-                      {% endif %}
-                      {% if item["source"] %}
-                      <span class="meta-tag">{{ item["source"] }}</span>
-                      {% endif %}
-                    </li>
-                    {% endfor %}
-                  </ul>
-                </div>
-                {% endfor %}
-              </div>
-              {% else %}
-              <p class="empty-state">No connected resources were available for this node yet.</p>
-              {% endif %}
-            </section>
-            {% endif %}
-
-            {% if provenance_groups %}
-            <section class="describe-block">
-              <h3>Provenance Information</h3>
-              <div class="relation-groups">
-                {% for group in provenance_groups %}
-                <div class="relation-group">
-                  <h4>{{ group["label"] }}</h4>
-                  <ul class="value-list">
-                    {% for item in group["items"] %}
-                    <li class="value-item">
-                      {% if item["uri"] %}
-                      <a href="{{ item['uri'] }}">{{ item["label"] }}</a>
-                      {% else %}
-                      <span>{{ item["label"] }}</span>
-                      {% endif %}
-                      {% if item["meta"] %}
-                      <span class="meta-tag">{{ item["meta"] }}</span>
-                      {% endif %}
-                      {% if item["source"] %}
-                      <span class="meta-tag">{{ item["source"] }}</span>
-                      {% endif %}
-                    </li>
-                    {% endfor %}
-                  </ul>
-                </div>
-                {% endfor %}
-              </div>
-            </section>
-            {% endif %}
-
-            {% if provenance_cards %}
-            <section class="describe-block">
-              <h3>Occurrence Trails</h3>
-              <div class="provenance-grid">
-                {% for card in provenance_cards %}
-                <article class="provenance-card">
-                  <h4>{{ card["label"] }}</h4>
-                  {% if card["kind"] %}
-                  <p class="provenance-kind">{{ card["kind"] }}</p>
-                  {% endif %}
-                  {% if card["relations"] %}
-                  <p class="provenance-meta">Relations: {{ card["relations"]|join(", ") }}</p>
-                  {% endif %}
-                  {% if card["paper_label"] %}
-                  <p class="provenance-meta">
-                    Source:
-                    {% if card["paper_uri"] %}
-                    <a href="{{ card['paper_uri'] }}">{{ card["paper_label"] }}</a>
-                    {% else %}
-                    {{ card["paper_label"] }}
-                    {% endif %}
-                  </p>
-                  {% endif %}
-                  {% if card["section_label"] %}
-                  <p class="provenance-meta">Section: {{ card["section_label"] }}</p>
-                  {% endif %}
-                  {% if card["sentence_label"] %}
-                  <blockquote>{{ card["sentence_label"] }}</blockquote>
-                  {% endif %}
-                </article>
-                {% endfor %}
-              </div>
-            </section>
-            {% endif %}
-
-            {% if describe_kind == "paper" and paper_sections %}
-            <section class="describe-block">
-              <div class="describe-section-heading">
-                <h3>Paper Structure</h3>
-                <span class="count-pill">{{ paper_sections|length }} sections</span>
-              </div>
-              <div class="describe-sections">
-                {% for section in paper_sections %}
-                <details class="section-card" {% if loop.first %}open{% endif %}>
-                  <summary>
-                    <span>{{ section["title"] }}</span>
-                    <span class="meta-tag">{{ section["kind"] }}</span>
-                  </summary>
-                  {% if section["body"] %}
-                  <div class="section-body">{{ section["body"] }}</div>
-                  {% else %}
-                  <p class="empty-state">No paragraph text was available for this section yet.</p>
-                  {% endif %}
-                </details>
-                {% endfor %}
-              </div>
-            </section>
             {% endif %}
           </section>
-        </div>
+          {% endif %}
+
+          {% if artifact_references %}
+          <section class="describe-block">
+            <div class="describe-section-heading">
+              <h3>Paper References</h3>
+              <span class="count-pill">{{ artifact_references|length }} papers</span>
+            </div>
+            <div class="artifact-reference-papers">
+              {% for paper in artifact_references %}
+              <article class="artifact-paper-card">
+                <h4>
+                  {% if paper["paper_uri"] %}
+                  <a href="{{ paper['paper_uri'] }}">{{ paper["paper_label"] }}</a>
+                  {% else %}
+                  {{ paper["paper_label"] }}
+                  {% endif %}
+                </h4>
+                <div class="artifact-section-list">
+                  {% for section in paper["sections"] %}
+                  <details class="artifact-section-card" {% if loop.first %}open{% endif %}>
+                    <summary>
+                      <span>{{ section["title"] }}</span>
+                      <span class="meta-tag">{{ section["kind"] }}</span>
+                    </summary>
+                    <div class="artifact-reference-list">
+                      {% for item in section["items"] %}
+                      <article class="artifact-reference-item">
+                        <div class="artifact-reference-meta">
+                          {% for relation_label in item["relation_labels"] %}
+                          <span class="meta-tag">{{ relation_label }}</span>
+                          {% endfor %}
+                          {% if is_topic_node and item["artifact_label"] %}
+                          <span class="meta-tag">{{ item["artifact_label"] }}</span>
+                          {% endif %}
+                          {% if item["kind"] %}
+                          <span class="meta-tag">{{ item["kind"] }}</span>
+                          {% endif %}
+                          {% if item["sentence_position"] %}
+                          <span class="meta-tag">Sentence {{ item["sentence_position"] }}</span>
+                          {% endif %}
+                        </div>
+                        <p class="artifact-reference-snippet">
+                          {% for fragment in item["fragments"] %}
+                          {% if fragment["match"] %}
+                          <mark class="artifact-hit">{{ fragment["text"] }}</mark>
+                          {% else %}
+                          {{ fragment["text"] }}
+                          {% endif %}
+                          {% endfor %}
+                        </p>
+                        <p class="artifact-reference-source">
+                          <a href="{{ item['node_uri'] }}">{{ item["node_label"] }}</a>
+                        </p>
+                      </article>
+                      {% endfor %}
+                    </div>
+                  </details>
+                  {% endfor %}
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+          </section>
+          {% endif %}
+
+          {% if describe_kind in ["artifact", "argument", "descriptor"] or is_topic_node %}
+          <section class="describe-block">
+            <h3>Connected Resource</h3>
+            {% if relation_groups %}
+            <div class="relation-groups">
+              {% for group in relation_groups %}
+              <div class="relation-group">
+                <h4>{{ group["label"] }}</h4>
+                <ul class="value-list">
+                  {% for item in group["items"] %}
+                  <li class="value-item">
+                    <a href="{{ item['uri'] }}">{{ item["label"] }}</a>
+                    {% if item["meta"] %}
+                    <span class="meta-tag">{{ item["meta"] }}</span>
+                    {% endif %}
+                    {% if item["source"] %}
+                    <span class="meta-tag">{{ item["source"] }}</span>
+                    {% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <p class="empty-state">No connected resources were available for this node yet.</p>
+            {% endif %}
+          </section>
+          {% endif %}
+
+          {% if provenance_groups %}
+          <section class="describe-block">
+            <h3>Provenance Information</h3>
+            <div class="relation-groups">
+              {% for group in provenance_groups %}
+              <div class="relation-group">
+                <h4>{{ group["label"] }}</h4>
+                <ul class="value-list">
+                  {% for item in group["items"] %}
+                  <li class="value-item">
+                    {% if item["uri"] %}
+                    <a href="{{ item['uri'] }}">{{ item["label"] }}</a>
+                    {% else %}
+                    <span>{{ item["label"] }}</span>
+                    {% endif %}
+                    {% if item["meta"] %}
+                    <span class="meta-tag">{{ item["meta"] }}</span>
+                    {% endif %}
+                    {% if item["source"] %}
+                    <span class="meta-tag">{{ item["source"] }}</span>
+                    {% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endfor %}
+            </div>
+          </section>
+          {% endif %}
+
+          {% if provenance_cards %}
+          <section class="describe-block">
+            <h3>Occurrence Trails</h3>
+            <div class="provenance-grid">
+              {% for card in provenance_cards %}
+              <article class="provenance-card">
+                <h4>{{ card["label"] }}</h4>
+                {% if card["kind"] %}
+                <p class="provenance-kind">{{ card["kind"] }}</p>
+                {% endif %}
+                {% if card["relations"] %}
+                <p class="provenance-meta">Relations: {{ card["relations"]|join(", ") }}</p>
+                {% endif %}
+                {% if card["paper_label"] %}
+                <p class="provenance-meta">
+                  Source:
+                  {% if card["paper_uri"] %}
+                  <a href="{{ card['paper_uri'] }}">{{ card["paper_label"] }}</a>
+                  {% else %}
+                  {{ card["paper_label"] }}
+                  {% endif %}
+                </p>
+                {% endif %}
+                {% if card["section_label"] %}
+                <p class="provenance-meta">Section: {{ card["section_label"] }}</p>
+                {% endif %}
+                {% if card["sentence_label"] %}
+                <blockquote>{{ card["sentence_label"] }}</blockquote>
+                {% endif %}
+              </article>
+              {% endfor %}
+            </div>
+          </section>
+          {% endif %}
+
+          {% if describe_kind == "paper" and paper_sections %}
+          <section class="describe-block">
+            <div class="describe-section-heading">
+              <h3>Paper Structure</h3>
+              <span class="count-pill">{{ paper_sections|length }} sections</span>
+            </div>
+            <div class="describe-sections">
+              {% for section in paper_sections %}
+              <details class="section-card" {% if loop.first %}open{% endif %}>
+                <summary>
+                  <span>{{ section["title"] }}</span>
+                  <span class="meta-tag">{{ section["kind"] }}</span>
+                </summary>
+                {% if section["body"] %}
+                <div class="section-body">{{ section["body"] }}</div>
+                {% else %}
+                <p class="empty-state">No paragraph text was available for this section yet.</p>
+                {% endif %}
+              </details>
+              {% endfor %}
+            </div>
+          </section>
+          {% endif %}
+        </section>
       </div>
-    </main>
-{% include "_footer.html" %}
-  </body>
+    </div>
+  </main>
+  {% include "_footer.html" %}
+</body>
+
 </html>

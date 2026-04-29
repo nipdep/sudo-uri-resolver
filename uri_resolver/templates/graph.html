@@ -1,231 +1,237 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>{{ title }} - Graph View - SUDO KG</title>
-{% include "_head.html" %}
-  </head>
-  <body>
-    <header class="site-chrome">
-      <div class="chrome-inner">
-        <div class="wordmark-group">
-          <img class="wordmark-symbol" src="{{ apple_touch_icon_path }}" alt="" aria-hidden="true" />
-          <div class="wordmark-text">
-            <a class="wordmark-title" href="{{ home_path }}">SUDO KG</a>
-            <span class="wordmark-subtitle">Discourse Aware Scholarly Knowledge Graph</span>
-          </div>
-        </div>
-        <nav class="chrome-links" aria-label="Top navigation">
-          <a href="{{ graph_path }}" class="active">Web</a>
-          <a href="{{ rdf_path }}">Machine readable View</a>
-          <a href="{{ sparql_path }}">SPARQL</a>
-        </nav>
-      </div>
-    </header>
 
-    <main class="mw-page">
-      <div class="page-shell">
-        <section class="entity-header">
-          <div class="title-row">
-            <h1>{{ title }}</h1>
-            <span class="entity-id">{{ node_type }}</span>
-          </div>
-          {% if description %}
-          <p class="description">{{ description }}</p>
+<head>
+  <title>{{ title }} - Graph View - SUDO KG</title>
+  {% include "_head.html" %}
+</head>
+
+<body>
+  <header class="site-chrome">
+    <div class="chrome-inner">
+      <div class="wordmark-group">
+        <img class="wordmark-symbol" src="{{ apple_touch_icon_path }}" alt="" aria-hidden="true" />
+        <div class="wordmark-text">
+          <a class="wordmark-title" href="{{ home_path }}">SUDO KG</a>
+          <span class="wordmark-subtitle">Discourse Aware Scholarly Knowledge Graph</span>
+        </div>
+      </div>
+      <nav class="chrome-links" aria-label="Top navigation">
+        <a href="{{ graph_path }}" class="active">Web</a>
+        <a href="{{ rdf_path }}">RDF</a>
+        <a href="{{ sparql_path }}">SPARQL</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mw-page">
+    <div class="page-shell">
+      <section class="entity-header">
+        <div class="title-row">
+          <h1>{{ title }}</h1>
+          <span class="entity-id">{{ node_type }}</span>
+        </div>
+        {% if description %}
+        <p class="description">{{ description }}</p>
+        {% endif %}
+      </section>
+
+      <nav class="page-tabs" aria-label="Entity actions">
+        <a href="{{ doc_path }}">Preview</a>
+        <a href="{{ describe_path }}">Describe</a>
+        <a href="{{ graph_path }}" class="active">Graph View</a>
+      </nav>
+
+      <div class="layout">
+        <aside class="sidebar">
+          <h2>Graph Overview</h2>
+          <dl class="facts">
+            <dt>Persistent URI</dt>
+            <dd><a href="{{ persistent_uri_path }}">{{ persistent_uri }}</a></dd>
+
+            <dt>Node Type</dt>
+            <dd>{{ node_type }}</dd>
+
+            <dt>Connected Nodes</dt>
+            <dd>{{ connected_node_count }}</dd>
+
+            <dt>Graph Nodes</dt>
+            <dd>{{ graph_node_count }}</dd>
+
+            <dt>Graph Edges</dt>
+            <dd>{{ graph_edge_count }}</dd>
+
+            <dt>SPARQL Query Count</dt>
+            <dd>{{ sparql_query_count }}</dd>
+          </dl>
+
+          {% if type_labels %}
+          <h3>Semantic Types</h3>
+          <ul class="format-links">
+            {% for type_label in type_labels %}
+            <li>{{ type_label }}</li>
+            {% endfor %}
+          </ul>
           {% endif %}
-        </section>
+        </aside>
 
-        <nav class="page-tabs" aria-label="Entity actions">
-          <a href="{{ doc_path }}">Preview</a>
-          <a href="{{ describe_path }}">Describe</a>
-          <a href="{{ graph_path }}" class="active">Graph View</a>
-        </nav>
+        <section class="content graph-content">
+          <div class="content-header">
+            <h2>Graph View</h2>
+            <span class="count-pill">{{ graph_edge_count }} links</span>
+          </div>
+          <p class="graph-description">This view shows the same expanded neighborhood as Describe, arranged as an
+            interactive graph of connected nodes and relation types.</p>
 
-        <div class="layout">
-          <aside class="sidebar">
-            <h2>Graph Overview</h2>
-            <dl class="facts">
-              <dt>Persistent URI</dt>
-              <dd><a href="{{ persistent_uri_path }}">{{ persistent_uri }}</a></dd>
+          <div class="graph-legend">
+            <span class="graph-legend-item"><span class="graph-legend-swatch root"></span>Current node</span>
+            <span class="graph-legend-item"><span class="graph-legend-swatch incoming"></span>Incoming neighbor</span>
+            <span class="graph-legend-item"><span class="graph-legend-swatch outgoing"></span>Outgoing neighbor</span>
+            <span class="graph-legend-item"><span class="graph-legend-swatch bidirectional"></span>Bidirectional
+              neighbor</span>
+          </div>
 
-              <dt>Node Type</dt>
-              <dd>{{ node_type }}</dd>
-
-              <dt>Connected Nodes</dt>
-              <dd>{{ connected_node_count }}</dd>
-
-              <dt>Graph Nodes</dt>
-              <dd>{{ graph_node_count }}</dd>
-
-              <dt>Graph Edges</dt>
-              <dd>{{ graph_edge_count }}</dd>
-
-              <dt>SPARQL Query Count</dt>
-              <dd>{{ sparql_query_count }}</dd>
-            </dl>
-
-            {% if type_labels %}
-            <h3>Semantic Types</h3>
-            <ul class="format-links">
-              {% for type_label in type_labels %}
-              <li>{{ type_label }}</li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-          </aside>
-
-          <section class="content graph-content">
-            <div class="content-header">
-              <h2>Graph View</h2>
-              <span class="count-pill">{{ graph_edge_count }} links</span>
+          <section class="graph-shell">
+            <div class="graph-stage" id="graph-stage">
+              <svg class="graph-svg" id="graph-svg" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet"
+                aria-hidden="true">
+                <defs>
+                  <marker id="graph-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"
+                    markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z"></path>
+                  </marker>
+                </defs>
+              </svg>
+              <div class="graph-node-layer" id="graph-node-layer"></div>
             </div>
-            <p class="graph-description">This view shows the same expanded neighborhood as Describe, arranged as an interactive graph of connected nodes and relation types.</p>
-
-            <div class="graph-legend">
-              <span class="graph-legend-item"><span class="graph-legend-swatch root"></span>Current node</span>
-              <span class="graph-legend-item"><span class="graph-legend-swatch incoming"></span>Incoming neighbor</span>
-              <span class="graph-legend-item"><span class="graph-legend-swatch outgoing"></span>Outgoing neighbor</span>
-              <span class="graph-legend-item"><span class="graph-legend-swatch bidirectional"></span>Bidirectional neighbor</span>
-            </div>
-
-            <section class="graph-shell">
-              <div class="graph-stage" id="graph-stage">
-                <svg class="graph-svg" id="graph-svg" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-                  <defs>
-                    <marker id="graph-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-                      <path d="M0,0 L0,6 L9,3 z"></path>
-                    </marker>
-                  </defs>
-                </svg>
-                <div class="graph-node-layer" id="graph-node-layer"></div>
-              </div>
-            </section>
-
-            <section class="graph-inspector" id="graph-inspector">
-              <div class="graph-inspector-head">
-                <h3 id="graph-inspector-title">{{ title }}</h3>
-                <a id="graph-inspector-link" href="{{ doc_path }}">Open Resource</a>
-              </div>
-              <p class="graph-inspector-role" id="graph-inspector-role">Current node</p>
-              <div class="graph-chip-row" id="graph-inspector-types">
-                {% for type_label in type_labels %}
-                <span class="meta-tag">{{ type_label }}</span>
-                {% endfor %}
-              </div>
-              <div class="graph-relations" id="graph-inspector-relations"></div>
-            </section>
           </section>
-        </div>
+
+          <section class="graph-inspector" id="graph-inspector">
+            <div class="graph-inspector-head">
+              <h3 id="graph-inspector-title">{{ title }}</h3>
+              <a id="graph-inspector-link" href="{{ doc_path }}">Open Resource</a>
+            </div>
+            <p class="graph-inspector-role" id="graph-inspector-role">Current node</p>
+            <div class="graph-chip-row" id="graph-inspector-types">
+              {% for type_label in type_labels %}
+              <span class="meta-tag">{{ type_label }}</span>
+              {% endfor %}
+            </div>
+            <div class="graph-relations" id="graph-inspector-relations"></div>
+          </section>
+        </section>
       </div>
-    </main>
-    <script id="graph-payload" type="application/json">{{ {"nodes": graph_nodes, "edges": graph_edges}|tojson }}</script>
-    <script>
-      (() => {
-        const payloadEl = document.getElementById("graph-payload");
-        if (!payloadEl) return;
-        const payload = JSON.parse(payloadEl.textContent);
-        const stage = document.getElementById("graph-stage");
-        const svg = document.getElementById("graph-svg");
-        const nodeLayer = document.getElementById("graph-node-layer");
-        const inspectorTitle = document.getElementById("graph-inspector-title");
-        const inspectorLink = document.getElementById("graph-inspector-link");
-        const inspectorRole = document.getElementById("graph-inspector-role");
-        const inspectorTypes = document.getElementById("graph-inspector-types");
-        const inspectorRelations = document.getElementById("graph-inspector-relations");
+    </div>
+  </main>
+  <script id="graph-payload" type="application/json">{{ {"nodes": graph_nodes, "edges": graph_edges}|tojson }}</script>
+  <script>
+    (() => {
+      const payloadEl = document.getElementById("graph-payload");
+      if (!payloadEl) return;
+      const payload = JSON.parse(payloadEl.textContent);
+      const stage = document.getElementById("graph-stage");
+      const svg = document.getElementById("graph-svg");
+      const nodeLayer = document.getElementById("graph-node-layer");
+      const inspectorTitle = document.getElementById("graph-inspector-title");
+      const inspectorLink = document.getElementById("graph-inspector-link");
+      const inspectorRole = document.getElementById("graph-inspector-role");
+      const inspectorTypes = document.getElementById("graph-inspector-types");
+      const inspectorRelations = document.getElementById("graph-inspector-relations");
 
-        const width = 1200;
-        const height = 720;
-        const nodeById = new Map(payload.nodes.map((node) => [node.id, node]));
-        const rootNode = payload.nodes.find((node) => node.role === "root") || payload.nodes[0];
-        const neighborNodes = payload.nodes.filter((node) => node.id !== rootNode.id);
-        const positions = new Map();
-        const buttonById = new Map();
-        let selectedNodeId = rootNode.id;
-        let dragState = null;
+      const width = 1200;
+      const height = 720;
+      const nodeById = new Map(payload.nodes.map((node) => [node.id, node]));
+      const rootNode = payload.nodes.find((node) => node.role === "root") || payload.nodes[0];
+      const neighborNodes = payload.nodes.filter((node) => node.id !== rootNode.id);
+      const positions = new Map();
+      const buttonById = new Map();
+      let selectedNodeId = rootNode.id;
+      let dragState = null;
 
-        positions.set(rootNode.id, { x: width / 2, y: height / 2 });
-        const radius = Math.min(width, height) * 0.33;
-        neighborNodes.forEach((node, index) => {
-          const angle = (-Math.PI / 2) + ((Math.PI * 2) * index) / Math.max(neighborNodes.length, 1);
-          positions.set(node.id, {
-            x: width / 2 + Math.cos(angle) * radius,
-            y: height / 2 + Math.sin(angle) * radius,
-          });
+      positions.set(rootNode.id, { x: width / 2, y: height / 2 });
+      const radius = Math.min(width, height) * 0.33;
+      neighborNodes.forEach((node, index) => {
+        const angle = (-Math.PI / 2) + ((Math.PI * 2) * index) / Math.max(neighborNodes.length, 1);
+        positions.set(node.id, {
+          x: width / 2 + Math.cos(angle) * radius,
+          y: height / 2 + Math.sin(angle) * radius,
         });
+      });
 
-        function clamp(value, min, max) {
-          return Math.min(Math.max(value, min), max);
-        }
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
 
-        function pointerToCanvas(clientX, clientY) {
-          const rect = stage.getBoundingClientRect();
-          const x = ((clientX - rect.left) / rect.width) * width;
-          const y = ((clientY - rect.top) / rect.height) * height;
-          return {
-            x: clamp(x, 88, width - 88),
-            y: clamp(y, 68, height - 68),
-          };
-        }
+      function pointerToCanvas(clientX, clientY) {
+        const rect = stage.getBoundingClientRect();
+        const x = ((clientX - rect.left) / rect.width) * width;
+        const y = ((clientY - rect.top) / rect.height) * height;
+        return {
+          x: clamp(x, 88, width - 88),
+          y: clamp(y, 68, height - 68),
+        };
+      }
 
-        function relationSectionsFor(nodeId) {
-          return payload.edges
-            .filter((edge) => edge.source === nodeId || edge.target === nodeId)
-            .map((edge) => {
-              const otherId = edge.source === nodeId ? edge.target : edge.source;
-              const otherNode = nodeById.get(otherId);
-              const direction = edge.source === nodeId ? "Outgoing" : "Incoming";
-              return {
-                direction,
-                node: otherNode,
-                labels: edge.relation_labels,
-              };
-            });
-        }
+      function relationSectionsFor(nodeId) {
+        return payload.edges
+          .filter((edge) => edge.source === nodeId || edge.target === nodeId)
+          .map((edge) => {
+            const otherId = edge.source === nodeId ? edge.target : edge.source;
+            const otherNode = nodeById.get(otherId);
+            const direction = edge.source === nodeId ? "Outgoing" : "Incoming";
+            return {
+              direction,
+              node: otherNode,
+              labels: edge.relation_labels,
+            };
+          });
+      }
 
-        function updateInspector(nodeId) {
-          selectedNodeId = nodeId;
-          const node = nodeById.get(nodeId);
-          if (!node) return;
-          inspectorTitle.textContent = node.label;
-          inspectorLink.href = node.href;
-          inspectorRole.textContent = node.role === "root" ? "Current node" : `${node.direction} neighbor`;
-          inspectorTypes.innerHTML = "";
-          (node.types || []).forEach((typeLabel) => {
+      function updateInspector(nodeId) {
+        selectedNodeId = nodeId;
+        const node = nodeById.get(nodeId);
+        if (!node) return;
+        inspectorTitle.textContent = node.label;
+        inspectorLink.href = node.href;
+        inspectorRole.textContent = node.role === "root" ? "Current node" : `${node.direction} neighbor`;
+        inspectorTypes.innerHTML = "";
+        (node.types || []).forEach((typeLabel) => {
+          const chip = document.createElement("span");
+          chip.className = "meta-tag";
+          chip.textContent = typeLabel;
+          inspectorTypes.appendChild(chip);
+        });
+        inspectorRelations.innerHTML = "";
+        relationSectionsFor(nodeId).forEach((entry) => {
+          const card = document.createElement("article");
+          card.className = "graph-relation-card";
+          const heading = document.createElement("h4");
+          heading.textContent = `${entry.direction}: ${entry.node ? entry.node.label : "Unknown node"}`;
+          card.appendChild(heading);
+          const chips = document.createElement("div");
+          chips.className = "graph-chip-row";
+          entry.labels.forEach((label) => {
             const chip = document.createElement("span");
             chip.className = "meta-tag";
-            chip.textContent = typeLabel;
-            inspectorTypes.appendChild(chip);
+            chip.textContent = label;
+            chips.appendChild(chip);
           });
-          inspectorRelations.innerHTML = "";
-          relationSectionsFor(nodeId).forEach((entry) => {
-            const card = document.createElement("article");
-            card.className = "graph-relation-card";
-            const heading = document.createElement("h4");
-            heading.textContent = `${entry.direction}: ${entry.node ? entry.node.label : "Unknown node"}`;
-            card.appendChild(heading);
-            const chips = document.createElement("div");
-            chips.className = "graph-chip-row";
-            entry.labels.forEach((label) => {
-              const chip = document.createElement("span");
-              chip.className = "meta-tag";
-              chip.textContent = label;
-              chips.appendChild(chip);
-            });
-            card.appendChild(chips);
-            inspectorRelations.appendChild(card);
-          });
-          buttonById.forEach((button, buttonId) => {
-            button.classList.toggle("selected", buttonId === nodeId);
-          });
-        }
+          card.appendChild(chips);
+          inspectorRelations.appendChild(card);
+        });
+        buttonById.forEach((button, buttonId) => {
+          button.classList.toggle("selected", buttonId === nodeId);
+        });
+      }
 
-        function renderEdges() {
-          const edgeMarkup = payload.edges.map((edge, index) => {
-            const source = positions.get(edge.source);
-            const target = positions.get(edge.target);
-            if (!source || !target) return "";
-            const midX = (source.x + target.x) / 2;
-            const midY = (source.y + target.y) / 2;
-            return `
+      function renderEdges() {
+        const edgeMarkup = payload.edges.map((edge, index) => {
+          const source = positions.get(edge.source);
+          const target = positions.get(edge.target);
+          if (!source || !target) return "";
+          const midX = (source.x + target.x) / 2;
+          const midY = (source.y + target.y) / 2;
+          return `
               <g class="graph-edge-group ${selectedNodeId === edge.source || selectedNodeId === edge.target ? "active" : ""}" data-edge-index="${index}">
                 <line class="graph-edge" x1="${source.x}" y1="${source.y}" x2="${target.x}" y2="${target.y}" marker-end="url(#graph-arrow)"></line>
                 <g class="graph-edge-label" transform="translate(${midX}, ${midY})">
@@ -234,8 +240,8 @@
                 </g>
               </g>
             `;
-          }).join("");
-          svg.innerHTML = `
+        }).join("");
+        svg.innerHTML = `
             <defs>
               <marker id="graph-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
                 <path d="M0,0 L0,6 L9,3 z"></path>
@@ -243,65 +249,66 @@
             </defs>
             ${edgeMarkup}
           `;
-        }
+      }
 
-        function ensureButtons() {
-          payload.nodes.forEach((node) => {
-            if (buttonById.has(node.id)) return;
-            const button = document.createElement("button");
-            button.type = "button";
-            button.className = `graph-node graph-node-${node.direction}`;
-            button.dataset.nodeId = node.id;
-            button.innerHTML = `
+      function ensureButtons() {
+        payload.nodes.forEach((node) => {
+          if (buttonById.has(node.id)) return;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `graph-node graph-node-${node.direction}`;
+          button.dataset.nodeId = node.id;
+          button.innerHTML = `
               <span class="graph-node-label">${node.label}</span>
               ${node.types && node.types.length ? `<span class="graph-node-meta">${node.types[0]}</span>` : ""}
             `;
-            button.addEventListener("click", () => updateInspector(node.id));
-            button.addEventListener("dblclick", () => {
-              window.location.href = node.href;
-            });
-            button.addEventListener("pointerdown", (event) => {
-              dragState = {
-                nodeId: node.id,
-                pointerId: event.pointerId,
-              };
-              button.setPointerCapture(event.pointerId);
-            });
-            button.addEventListener("pointermove", (event) => {
-              if (!dragState || dragState.nodeId !== node.id || dragState.pointerId !== event.pointerId) return;
-              const next = pointerToCanvas(event.clientX, event.clientY);
-              positions.set(node.id, next);
-              render();
-            });
-            button.addEventListener("pointerup", (event) => {
-              if (dragState && dragState.pointerId === event.pointerId) {
-                dragState = null;
-              }
-            });
-            nodeLayer.appendChild(button);
-            buttonById.set(node.id, button);
+          button.addEventListener("click", () => updateInspector(node.id));
+          button.addEventListener("dblclick", () => {
+            window.location.href = node.href;
           });
-        }
-
-        function renderNodes() {
-          buttonById.forEach((button, nodeId) => {
-            const position = positions.get(nodeId);
-            if (!position) return;
-            button.style.left = `${(position.x / width) * 100}%`;
-            button.style.top = `${(position.y / height) * 100}%`;
+          button.addEventListener("pointerdown", (event) => {
+            dragState = {
+              nodeId: node.id,
+              pointerId: event.pointerId,
+            };
+            button.setPointerCapture(event.pointerId);
           });
-        }
+          button.addEventListener("pointermove", (event) => {
+            if (!dragState || dragState.nodeId !== node.id || dragState.pointerId !== event.pointerId) return;
+            const next = pointerToCanvas(event.clientX, event.clientY);
+            positions.set(node.id, next);
+            render();
+          });
+          button.addEventListener("pointerup", (event) => {
+            if (dragState && dragState.pointerId === event.pointerId) {
+              dragState = null;
+            }
+          });
+          nodeLayer.appendChild(button);
+          buttonById.set(node.id, button);
+        });
+      }
 
-        function render() {
-          ensureButtons();
-          renderEdges();
-          renderNodes();
-        }
+      function renderNodes() {
+        buttonById.forEach((button, nodeId) => {
+          const position = positions.get(nodeId);
+          if (!position) return;
+          button.style.left = `${(position.x / width) * 100}%`;
+          button.style.top = `${(position.y / height) * 100}%`;
+        });
+      }
 
-        render();
-        updateInspector(rootNode.id);
-      })();
-    </script>
-{% include "_footer.html" %}
-  </body>
+      function render() {
+        ensureButtons();
+        renderEdges();
+        renderNodes();
+      }
+
+      render();
+      updateInspector(rootNode.id);
+    })();
+  </script>
+  {% include "_footer.html" %}
+</body>
+
 </html>

@@ -2080,6 +2080,10 @@ def create_app(
                     request,
                     "images/android-chrome-192x192.png",
                 ),
+                "chrome_touch_icon_path": _static_path_for_request(
+                    request,
+                    "images/android-chrome-512x512.png",
+                ),
                 "doc_path": _public_path_for(
                     request,
                     "get_doc_path",
@@ -2820,6 +2824,10 @@ def create_app(
                 "apple_touch_icon_path": _static_path_for_request(
                     request,
                     "images/android-chrome-192x192.png",
+                ),
+                "chrome_touch_icon_path": _static_path_for_request(
+                    request,
+                    "images/android-chrome-512x512.png",
                 ),
                 "resolve_path": _join_public_base_path(
                     _public_base_path_for_request(request),
